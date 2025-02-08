@@ -17,7 +17,6 @@ import {
   avatarAtom,
   chatModeAtom,
   debugAtom,
-  inputTextAtom,
   mediaStreamActiveAtom,
   providerModelAtom,
   sessionDataAtom,
@@ -32,7 +31,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip"
 
 export function Chat() {
   const [avatar] = useAtom(avatarAtom)
-  const [inputText, setInputText] = useAtom(inputTextAtom)
   const [sessionData] = useAtom(sessionDataAtom)
   const [mediaStreamActive] = useAtom(mediaStreamActiveAtom)
   const [, setDebug] = useAtom(debugAtom)
