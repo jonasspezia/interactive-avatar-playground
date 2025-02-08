@@ -2,31 +2,38 @@
 
 import { useEffect, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, Stage } from '@react-three/drei';
 import { Visage } from '@readyplayerme/visage';
+import { useAtom } from 'jotai';
+import { selectedAvatarAtom } from './avatar-selector';
 
 interface Avatar3DProps {
   speaking: boolean;
 }
 
 export function Avatar3D({ speaking }: Avatar3DProps) {
+  const [selectedAvatar] = useAtom(selectedAvatarAtom);
   const avatarRef = useRef();
 
   return (
-    <div className="h-[400px] w-full">
-      <Canvas>
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[0, 10, 5]} intensity={1} />
-        <Visage
-          ref={avatarRef}
-          modelSrc="/avatar.glb"
-          animations={{
-            idle: '/animations/idle.glb',
-            talking: '/animations/talking.glb'
-          }}
-          currentAnimation={speaking ? 'talking' : 'idle'}
+    <div className="h-[400px] w-full rounded-lg overflow-hidden border border-border">
+      <Canvas shadows camera={{ position: [0, 1.5, 3], fov: 45 }}>
+        <Stage environment="city" intensity={0.5}>
+          <Visage
+            ref={avatarRef}
+            modelSrc={selectedAvatar}
+            animations={{
+              idle: 'https://assets.readyplayer.me/animations/idle.glb',
+              talking: 'https://assets.readyplayer.me/animations/talking.glb'
+            }}
+            currentAnimation={speaking ? 'talking' : 'idle'}
+          />
+        </Stage>
+        <OrbitControls 
+          enableZoom={false}
+          minPolarAngle={Math.PI / 2.5}
+          maxPolarAngle={Math.PI / 2}
         />
-        <OrbitControls enableZoom={false} />
       </Canvas>
     </div>
   );

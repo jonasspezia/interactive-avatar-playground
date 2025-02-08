@@ -22,6 +22,7 @@ import {
 } from "@/lib/atoms"
 
 import { Avatar3D } from "../avatar/avatar3d"
+import { AvatarSelector } from "../avatar/avatar-selector"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
@@ -109,6 +110,7 @@ export function Chat() {
       </div>
 
       <div className="flex-1">
+        <AvatarSelector />
         <Avatar3D speaking={speaking} />
       </div>
 
