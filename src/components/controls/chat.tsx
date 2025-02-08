@@ -1,9 +1,10 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react"
-import { generateText } from "ai"
 import { useChat } from "ai/react"
-import { chromeai } from "chrome-ai"
 import { AnimatePresence, motion } from "framer-motion"
 import { useAtom } from "jotai"
+import * as THREE from 'three'
 import {
   ArrowUp,
   BotMessageSquareIcon,
@@ -14,7 +15,6 @@ import {
 } from "lucide-react"
 
 import {
-  avatarAtom,
   chatModeAtom,
   debugAtom,
   mediaStreamActiveAtom,
@@ -30,7 +30,6 @@ import { Textarea } from "../ui/textarea"
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip"
 
 export function Chat() {
-  const [avatar] = useAtom(avatarAtom)
   const [sessionData] = useAtom(sessionDataAtom)
   const [mediaStreamActive] = useAtom(mediaStreamActiveAtom)
   const [, setDebug] = useAtom(debugAtom)
@@ -38,6 +37,8 @@ export function Chat() {
   const [providerModel, setProviderModel] = useAtom(providerModelAtom)
   const [isLoadingChat, setIsLoadingChat] = useState(false)
   const placeholderText = "Digite sua mensagem aqui..."
+  const avatarRef = useRef<THREE.Group>()
+  const [speaking, setSpeaking] = useState(false)
 
   const {
     input,
@@ -50,30 +51,39 @@ export function Chat() {
     stop,
   } = useChat({
     onResponse: (response) => {
-      console.log("ChatGPT Response:", response)
+      console.log("AI Response:", response)
+      // Text to speech
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(response.content)
+        utterance.lang = 'pt-BR'
+        utterance.onstart = () => setSpeaking(true)
+        utterance.onend = () => setSpeaking(false)
+        speechSynthesis.speak(utterance)
+      }
     },
     onFinish: async () => {
       setIsLoadingChat(false)
     },
     onError: (error) => {
       console.error("Error:", error)
+      setDebug(error.message)
     },
-    initialMessages: [
-      {
-        id: "1",
-        role: "system",
-        content: "You are a helpful assistant.",
-      },
-    ],
   })
 
+  // Inicializar Three.js e avatar
+  useEffect(() => {
+    // Código de inicialização do Three.js aqui
+    // Por enquanto apenas um placeholder
+    console.log("Avatar 3D seria inicializado aqui")
+  }, [])
+
   async function handleSpeak() {
-    if (!avatar.current) {
+    if (!avatarRef.current) {
       setDebug("Avatar API not initialized")
       return
     }
 
-    await avatar.current
+    await avatarRef.current
       .speak({
         taskRequest: { text: input, sessionId: sessionData?.sessionId },
       })
@@ -106,7 +116,7 @@ export function Chat() {
           console.log("Complete Sentence:", trimmedSentence)
           processedSentences.current.add(trimmedSentence) // Mark as logged
 
-          avatar.current!.speak({
+          avatarRef.current!.speak({
             taskRequest: {
               text: trimmedSentence,
               sessionId: sessionData?.sessionId,
@@ -120,12 +130,12 @@ export function Chat() {
   }, [messages])
 
   async function handleInterrupt() {
-    if (!avatar.current) {
+    if (!avatarRef.current) {
       setDebug("Avatar API not initialized")
       return
     }
     stop()
-    await avatar.current
+    await avatarRef.current
       .interrupt({ interruptRequest: { sessionId: sessionData?.sessionId } })
       .catch((e) => {
         setDebug(e.message)
