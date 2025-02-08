@@ -39,6 +39,7 @@ export function Chat() {
   const [chatMode, setChatMode] = useAtom(chatModeAtom)
   const [providerModel, setProviderModel] = useAtom(providerModelAtom)
   const [isLoadingChat, setIsLoadingChat] = useState(false)
+  const placeholderText = "Digite sua mensagem aqui..."
 
   const {
     input,
@@ -152,8 +153,8 @@ export function Chat() {
         <Switch
           id="chat-mode"
           className="data-[state=unchecked]:bg-primary"
-          defaultChecked={chatMode}
-          onCheckedChange={() => setChatMode(!chatMode)}
+          checked={chatMode}
+          onCheckedChange={setChatMode}
         />
 
         <Tooltip>
@@ -183,7 +184,15 @@ export function Chat() {
                     className="rounded-full"
                   >
                     <Paperclip className="size-5" />
-                    <Input multiple={false} type="file" className="hidden" />
+                    <Input 
+                      multiple={false} 
+                      type="file" 
+                      className="hidden" 
+                      onChange={(e) => {
+                        // Adicionar lógica de upload aqui
+                        console.log("File selected:", e.target.files?.[0])
+                      }}
+                    />
                     <span className="sr-only">Attach file</span>
                   </Button>
                 </TooltipTrigger>
@@ -200,6 +209,7 @@ export function Chat() {
                 onChange={handleInputChange}
                 dir="auto"
                 rows={1}
+                placeholder={placeholderText}
                 className="h-[40px] min-h-[40px] resize-none overflow-y-hidden rounded-none border-0 px-0 shadow-none focus:ring-0 focus-visible:ring-0"
               />
             </div>

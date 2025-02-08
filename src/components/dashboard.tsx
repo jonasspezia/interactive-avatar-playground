@@ -52,15 +52,27 @@ export function Dashboard() {
 
   const navItems: NavItem[] = [
     {
+      label: "Chat",
+      icon: <Bot className="size-5" />,
+      ariaLabel: "Chat",
+      content: <Chat />,
+    },
+    {
+      label: "Configurações",
+      icon: <Settings2Icon className="size-5" />,
+      ariaLabel: "Configurações",
+      content: <Settings />,
+    },
+    {
       label: "Playground",
       icon: <SquareTerminal className="size-5" />,
       ariaLabel: "Playground",
       content: <Playground />,
     },
     {
-      label: "LLM Models",
+      label: "Modelos de LLM",
       icon: <Bot className="size-5" />,
-      ariaLabel: "Models",
+      ariaLabel: "Modelos",
       content: <Models />,
     },
     {
@@ -68,12 +80,6 @@ export function Dashboard() {
       icon: <Code2 className="size-5" />,
       ariaLabel: "API",
       content: <>api</>,
-    },
-    {
-      label: "Settings",
-      icon: <Settings2Icon className="size-5" />,
-      ariaLabel: "Settings",
-      content: <Settings />,
     },
   ]
 
@@ -143,7 +149,7 @@ export function Dashboard() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="right" sideOffset={5}>
-                Streaming Avatar SDK API Reference
+                Referência da SDK do Avatar de Streaming
               </TooltipContent>
             </Tooltip>
           </nav>
@@ -166,7 +172,7 @@ export function Dashboard() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="right" sideOffset={5}>
-                Streaming API Documentation
+                Documentação da API de Avatares de Streaming
               </TooltipContent>
             </Tooltip>
           </nav>
@@ -174,12 +180,12 @@ export function Dashboard() {
       </aside>
       <div className="flex flex-col">
         <header className="sticky top-0 z-10 flex h-[53px] items-center gap-1 border-b bg-background px-4">
-          <h1 className="text-xl font-semibold">Playground</h1>
+          <h1 className="text-xl font-semibold">{selectedNavItem.label}</h1>
           <Drawer>
             <DrawerTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">
                 <SettingsIcon className="size-4" />
-                <span className="sr-only">Settings</span>
+                <span className="sr-only">Configurações</span>
               </Button>
             </DrawerTrigger>
             <DrawerContent className="max-h-[80vh]">
@@ -235,7 +241,7 @@ export function Dashboard() {
                       d="M6.343 4.938a1 1 0 0 1 0 1.415a8.003 8.003 0 0 0 0 11.317a1 1 0 1 1-1.414 1.414c-3.907-3.906-3.907-10.24 0-14.146a1 1 0 0 1 1.414 0m12.732 0c3.906 3.907 3.906 10.24 0 14.146a1 1 0 0 1-1.415-1.414a8.003 8.003 0 0 0 0-11.317a1 1 0 0 1 1.415-1.415M9.31 7.812a1 1 0 0 1 0 1.414a3.92 3.92 0 0 0 0 5.544a1 1 0 1 1-1.415 1.414a5.92 5.92 0 0 1 0-8.372a1 1 0 0 1 1.415 0m6.958 0a5.92 5.92 0 0 1 0 8.372a1 1 0 0 1-1.414-1.414a3.92 3.92 0 0 0 0-5.544a1 1 0 0 1 1.414-1.414m-4.186 2.77a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3"
                     />
                   </svg>
-                  <div>Live</div>
+                  <div>Ao vivo</div>
                 </div>
               ) : (
                 <div className="flex space-x-1">
